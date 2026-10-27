@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>南极电商 · 关键词呈报 1016</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;color:#1f2937;min-height:100dvh}
+header{background:#1f3a5c;color:#fff;padding:20px 16px 14px;position:sticky;top:0;z-index:10;box-shadow:0 2px 12px rgba(31,58,92,.25)}
+.h-top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px}
+h1{font-size:18px;font-weight:700;letter-spacing:.5px}
+.h-sub{font-size:12px;color:#9fb3d1}
+.search-wrap{margin-top:12px;position:relative}
+.search-wrap svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);opacity:.55}
+#q{width:100%;padding:11px 40px 11px 38px;border:none;border-radius:10px;font-size:16px;background:#fff;color:#111;outline:none}
+#q:focus{box-shadow:0 0 0 3px rgba(217,140,60,.35)}
+#clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:none;background:#e5eaf1;color:#445;width:30px;height:30px;border-radius:50%;font-size:15px;display:none;cursor:pointer}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:10px 12px 2px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:7px 14px;border-radius:999px;border:1px solid #2c4a73;background:transparent;color:#c7d5ea;font-size:13px;cursor:pointer;min-height:34px}
+.tab.on{background:#fff;color:#1f3a5c;font-weight:700;border-color:#fff}
+main{max-width:860px;margin:0 auto;padding:14px 12px 60px}
+.stats{font-size:12px;color:#6b7a90;margin:2px 4px 10px}
+.sec-title{margin:18px 4px 8px;font-size:14px;font-weight:700;color:#1f3a5c;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:"";flex:1;height:1px;background:#d6dde8}
+.card{background:#fff;border-radius:12px;padding:12px 14px;margin-bottom:8px;box-shadow:0 1px 3px rgba(20,40,70,.07);border-left:3px solid #1f3a5c}
+.card .k{font-weight:700;font-size:15px;color:#16304f;margin-bottom:4px}
+.card .t{font-size:14px;line-height:1.65;color:#374151;white-space:pre-wrap}
+.card .c{margin-top:8px;font-size:13px;line-height:1.6;color:#8a4a12;background:#fdf3e7;border-radius:8px;padding:7px 10px;white-space:pre-wrap}
+.card .c b{color:#b02418;font-weight:700;font-size:12px;margin-right:6px}
+mark{background:#ffe9a8;color:#8a5a00;padding:0 1px;border-radius:2px}
+.no{font-size:11px;color:#9aa7b8;margin-right:8px;font-weight:400}
+.empty{text-align:center;color:#8a97a8;padding:60px 20px;font-size:14px;line-height:1.8}
+.empty svg{opacity:.35;margin-bottom:10px}
+.tagchip{display:inline-block;font-size:11px;color:#5b7292;background:#e8eef6;border-radius:4px;padding:1px 6px;margin-right:6px;vertical-align:1px}
+</style>
+</head>
+<body>
+<header>
+  <div class="h-top"><h1>南极电商 · 关键词呈报 1016</h1><span class="h-sub">内部资料 · 2026年10月</span></div>
+  <div class="search-wrap">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1f3a5c" stroke-width="2.4"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <input id="q" type="search" placeholder="搜索关键词、内容或批注…" autocomplete="off">
+    <button id="clear" aria-label="清空">✕</button>
+  </div>
+  <nav class="tabs" id="tabs"></nav>
+</header>
+<main><div class="stats" id="stats"></div><div id="list"></div></main>
+<script src="sheet_kw.js"></script><script src="sheet_terms.js"></script><script src="sheet_essence.js"></script><script src="sheet_quotes.js"></script><script src="sheet_method.js"></script>
+<script>
+const DATA=[window.S_kw,window.S_terms,window.S_essence,window.S_quotes,window.S_method];
+const TOTAL=321;
+let cur='all';
+const tabsEl=document.getElementById('tabs'),listEl=document.getElementById('list'),statsEl=document.getElementById('stats'),qEl=document.getElementById('q'),clearEl=document.getElementById('clear');
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function hl(s,q){let e=esc(s);if(!q)return e;const re=new RegExp('('+q.replace(/[.*+?^\$\{\}()\|[\]\\]/g,'\\\$&')+')','gi');return e.replace(re,'<mark>\</mark>');}
+function buildTabs(){
+  const mk=(id,name,n)=>{const b=document.createElement('button');b.className='tab'+(cur===id?' on':'');b.textContent=name;b.dataset.id=id;b.onclick=()=>{cur=id;buildTabs();render();window.scrollTo({top:0});};tabsEl.appendChild(b);};
+  mk('all','全部 '+TOTAL,0);
+  DATA.forEach(s=>mk(s.id,s.name+' '+s.data.length,0));
+}
+function render(){
+  const q=qEl.value.trim();clearEl.style.display=q?'block':'none';
+  const lq=q.toLowerCase();
+  let shown=0,html='';
+  const srcs=cur==='all'?DATA:DATA.filter(s=>s.id===cur);
+  srcs.forEach(s=>{
+    const rows=s.data.filter(d=>!q||((d.k||'')+' '+(d.t||'')+' '+(d.c||'')+' '+(d.s||'')).toLowerCase().includes(lq));
+    if(!rows.length)return;shown+=rows.length;
+    html+='<div class="sec-title">'+esc(s.name)+(q?'':' · '+rows.length)+'</div>';
+    let lastSec=null;
+    rows.forEach(d=>{
+      if(d.s&&d.s!==lastSec){lastSec=d.s;html+='<div style="margin:12px 4px 6px;font-size:12.5px;color:#5b7292"><span class="tagchip">'+esc(d.s)+'</span></div>';}
+      html+='<div class="card">';
+      if(d.k)html+='<div class="k"><span class="no">'+esc(d.no)+'</span>'+hl(d.k,q)+'</div>';
+      html+='<div class="t">'+(d.k?'':('<span class="no">'+esc(d.no)+'</span>'))+hl(d.t,q)+'</div>';
+      if(d.c)html+='<div class="c"><b>批注</b>'+hl(d.c,q)+'</div>';
+      html+='</div>';
+    });
+  });
+  listEl.innerHTML=html||'<div class="empty"><svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#8a97a8" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><br>没有找到与「'+esc(q)+'」相关的内容<br>换个关键词试试</div>';
+  statsEl.textContent=(q?'搜索「'+q+'」：':'')+('共 '+shown+' 条 / 总 '+TOTAL+' 条');
+}
+qEl.addEventListener('input',render);
+clearEl.addEventListener('click',()=>{qEl.value='';render();qEl.focus();});
+buildTabs();render();
+</script>
+</body>
+</html>
